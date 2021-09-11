@@ -29,18 +29,24 @@ public class DemoMain {
 
     public static void main(String[] args) throws ParseException {
         logger.info("启动我们的程序");
-        // 创建流程引擎
+        // 1.创建流程引擎
         ProcessEngine processEngine = getProcessEngine();
-        // 部署流程定义文件
+        // 2.部署流程定义文件
         ProcessDefinition processDefinition = getProcessDefinition(processEngine);
-        // 启动运行流程
+        // 3.启动运行流程
         ProcessInstance processInstance = getProcessInstance(processEngine, processDefinition);
 
-        // 处理流程任务
+        // 4.处理流程任务
         handleTask(processEngine, processInstance);
         logger.info("结束我们的程序");
     }
 
+    /**
+     * 4.处理流程任务
+     * @param processEngine
+     * @param processInstance
+     * @throws ParseException
+     */
     private static void handleTask(ProcessEngine processEngine, ProcessInstance processInstance) throws ParseException {
         Scanner scanner = new Scanner(System.in);
         while (processInstance != null && !processInstance.isEnded()) {
@@ -81,6 +87,12 @@ public class DemoMain {
         }
     }
 
+    /**
+     * 3.启动运行流程
+     * @param processEngine
+     * @param processDefinition
+     * @return
+     */
     private static ProcessInstance getProcessInstance(ProcessEngine processEngine, ProcessDefinition processDefinition) {
         RuntimeService runtimeService = processEngine.getRuntimeService();
         ProcessInstance processInstance = runtimeService.startProcessInstanceById(processDefinition.getId());
@@ -88,6 +100,11 @@ public class DemoMain {
         return processInstance;
     }
 
+    /**
+     * 2.部署流程定义文件
+     * @param processEngine
+     * @return
+     */
     private static ProcessDefinition getProcessDefinition(ProcessEngine processEngine) {
         RepositoryService repositoryService = processEngine.getRepositoryService();
         DeploymentBuilder deploymentBuilder = repositoryService.createDeployment();
@@ -102,6 +119,10 @@ public class DemoMain {
         return processDefinition;
     }
 
+    /**
+     *   1.创建流程引擎
+     * @return
+     */
     private static ProcessEngine getProcessEngine() {
         // 创建基于内存数据库的流程引擎
         ProcessEngineConfiguration cfg = ProcessEngineConfiguration.createStandaloneInMemProcessEngineConfiguration();
